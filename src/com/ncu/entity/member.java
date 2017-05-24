@@ -1,6 +1,6 @@
 package com.ncu.entity;
 
-public class member {
+public class Member {
 	private String name;
 
 	public String getName() {

@@ -2,28 +2,28 @@ package com.ncu.entity;
 
 import java.util.Date;
 
-public class record {
+public class Records {
 	private int type_id;
 	private int category_id;
 	private int member_id;
 	private double sum;
 	private Date date;
-	public int getType_id() {
+	public int getTypeId() {
 		return type_id;
 	}
-	public void setType_id(int type_id) {
+	public void setTypeId(int type_id) {
 		this.type_id = type_id;
 	}
-	public int getCategory_id() {
+	public int getCategoryId() {
 		return category_id;
 	}
-	public void setCategory_id(int category_id) {
+	public void setCategoryId(int category_id) {
 		this.category_id = category_id;
 	}
-	public int getMember_id() {
+	public int getMemberId() {
 		return member_id;
 	}
-	public void setMember_id(int member_id) {
+	public void setMemberId(int member_id) {
 		this.member_id = member_id;
 	}
 	public double getSum() {
