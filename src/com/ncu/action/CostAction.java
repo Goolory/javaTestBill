@@ -36,5 +36,11 @@ public class CostAction {
 		category=categoryDao.getAll(2);//支出项
 		return category;
 	}
+	public static ArrayList<Category> getTypeIncome(){
+		ArrayList<Category> category = new ArrayList<Category>();
+		CategoryDao categoryDao = new CategoryDao();
+		category=categoryDao.getAll(1);//支出项
+		return category;
+	}
 	
 }

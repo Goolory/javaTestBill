@@ -21,24 +21,16 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
         var index = layer.load(1);
         //模拟数据
         var data = new Array();
-        // for (var i = 0; i < 30; i++) {
-        //     data.push({ id: i + 1, num: '1', name: '衣服' });
-        // }
-        
-        // var html = $.ajax({
-        //        type: "GET",
-        //        url: "cost_cate.jsp",
-        //        async: false
-        //     }).responseText;
-        // var jsonobj = JSON.parse(html);
-        // for (var i = 0; i < jsonobj.length; i++) {
-        //     data.push({ id: jsonobj[i].id, num:jsonobj[i].num, category:jsonobj[i].category, member:jsonobj[i].member, sum:jsonobj[i].sum, date: jsonobj[i].date});
-        // }
-        
-        data.push({ id: 1, num: '1', name: '衣服' });
-        data.push({ id: 2, num: '2', name: '食品' });
-        data.push({ id: 3, num: '3', name: '交通' });
-        data.push({ id: 4, num: '4', name: '旅行' });
+        var html = $.ajax({
+            type: "GET",
+            url: "CategoryService?action=costType",
+            async: false
+         }).responseText;
+     var jsonobj = JSON.parse(html);
+         for (var i = 0; i < jsonobj.length; i++) {
+             data.push({ id: jsonobj[i].id,  name: jsonobj[i].name });
+         }
+       
 
         //模拟数据加载
         setTimeout(function () {
@@ -134,22 +126,30 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             btn: ['确定', '取消'],
             area: ['350px', '250px'],
             yes: function (index, layero) {
+//            	layer.msg('操作成功');
                 //这是核心的代码。
-                // parent.tab.tabAdd({
-                //     href: $(layero).find('input[name=url]').val(), //地址
-                //     icon: $(layero).find('input[name=icon]').val(),
-                //     title: $(layero).find('input[name=title]').val()
-                // });
-                html = "<tr>";
-                html += '<td><input type="checkbox" name="myselect"></td>'
-                html += "<td id="+ 5 + ">" + $(layero).find('input[name=url]').val() + "</td>";
-                html += '<td><form class="layui-form"><input type="checkbox" value="' + 5 + '" lay-filter="recommend" lay-skin="switch" checked /></form></td>';
-                html += '<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData(\'' + 5 + '\')"><i class="layui-icon">&#xe642;</i></button></td>';
-                html += '<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData(\'' + 5 + '\')"><i class="layui-icon">&#xe640;</i></button></td>';
-                html += "</tr>";
-                $("td#1").parent().parent().append(html);
-                form.render();  //重新渲染   
-                layer.close(index);            
+            	var name = $(layero).find('input[name=url]').val();
+            	var html = $.ajax({
+                    type: "GET",
+                    url: "CategoryService?action=add&name="+name+"&type="+2,
+                    async: false
+                 }).responseText;
+            	var jsonobj = JSON.parse(html);
+            	console.log(jsonobj[0].success);
+            	if(jsonobj[0].success=="true"){
+            		html = "<tr>";
+                    html += '<td><input type="checkbox" name="myselect"></td>'
+                    html += "<td id="+ 5 + ">" + $(layero).find('input[name=url]').val() + "</td>";
+                    html += '<td><form class="layui-form"><input type="checkbox" value="' + 5 + '" lay-filter="recommend" lay-skin="switch" checked /></form></td>';
+                    html += '<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData(\'' + 5 + '\')"><i class="layui-icon">&#xe642;</i></button></td>';
+                    html += '<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData(\'' + 5 + '\')"><i class="layui-icon">&#xe640;</i></button></td>';
+                    html += "</tr>";
+                    $("td#1").parent().parent().append(html);
+            	}
+            	initilData(1, 8);
+            	form.render();  //重新渲染   
+                layer.close(index); 
+                           
             },
             shade: false,
             maxmin: true
@@ -188,8 +188,16 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             layer.confirm('确定删除？', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                layer.msg('删除成功'); 
-                $("td#"+id).parent().remove();
+            	var html = $.ajax({
+                    type: "GET",
+                    url: "CategoryService?action=delete&id="+id,
+                    async: false
+                 }).responseText;
+            	var jsonobj = JSON.parse(html);
+            	if(jsonobj[0].success){
+            		layer.msg('删除成功'); 
+            		$("td#"+id).parent().remove();
+            	}
             }, function () {
                 layer.msg('取消');
             });
@@ -204,7 +212,18 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                 area: ['350px', '250px'],
                 yes: function (index, layero) { 
                     $("td#"+id).text($(layero).find('input[name=url]').val());
-                    form.render();  //重新渲染   
+                    
+                    var html = $.ajax({
+                        type: "GET",
+                        url: "CategoryService?action=update&id="+id+"&name="+$(layero).find('input[name=url]').val(),
+                        async: false
+                     }).responseText;
+                	var jsonobj = JSON.parse(html);
+                	console.log();
+                	if(jsonobj[0].success){
+                		layer.msg('修改成功');
+                	}
+                	form.render();  //重新渲染   
                     layer.close(index);           
                 },
                 shade: false,

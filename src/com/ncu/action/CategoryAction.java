@@ -11,4 +11,7 @@ public class CategoryAction {
 	public static int deleteCategory(int id){
 		return categoryDao.delete(id);
 	}
+	public static int addCategory(String name,int type){
+		return categoryDao.add(name, type);
+	}
 }

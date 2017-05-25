@@ -16,7 +16,7 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
         
         var html = $.ajax({
             type: "GET",
-            url: "CategoryService?action=costType",
+            url: "CategoryService?action=incomeType",
             async: false
          }).responseText;
      var jsonobj = JSON.parse(html);
@@ -175,8 +175,16 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
             layer.confirm('确定删除？', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                layer.msg('删除成功'); 
-                $("td#"+id).parent().remove();
+            	var html = $.ajax({
+                    type: "GET",
+                    url: "CategoryService?action=delete&id="+id,
+                    async: false
+                 }).responseText;
+            	var jsonobj = JSON.parse(html);
+            	if(jsonobj[0].success){
+            		layer.msg('删除成功'); 
+            		$("td#"+id).parent().remove();
+            	}
             }, function () {
                 layer.msg('取消');
             });

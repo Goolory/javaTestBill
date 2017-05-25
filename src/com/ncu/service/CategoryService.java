@@ -44,11 +44,26 @@ public class CategoryService extends HttpServlet {
 						stringer.object().key("id").value(cateList.get(i).getId()).
 						key("name").value(cateList.get(i).getName()).endObject();
 					}
-					
+					stringer.endArray();
 					response.getOutputStream().write(stringer.toString().getBytes("UTF-8"));
 					response.setContentType("text/json; charset=UTF-8");
 				}
-		}else if(action.equals("update")){
+		}else if(action.equals("incomeType")){
+			ArrayList<Category> cateList = CostAction.getTypeIncome();
+			if(cateList!=null){
+				JSONStringer stringer = new JSONStringer();
+				
+				stringer.array();
+				for(int i=0;i<cateList.size();i++){
+					stringer.object().key("id").value(cateList.get(i).getId()).
+					key("name").value(cateList.get(i).getName()).endObject();
+				}
+				stringer.endArray();
+				response.getOutputStream().write(stringer.toString().getBytes("UTF-8"));
+				response.setContentType("text/json; charset=UTF-8");
+			}
+		}
+		else if(action.equals("update")){
 			String id = request.getParameter("id");
 			String name = request.getParameter("name");
 			JSONStringer stringer = new JSONStringer();
@@ -75,6 +90,21 @@ public class CategoryService extends HttpServlet {
 			stringer.endArray();
 			response.getOutputStream().write(stringer.toString().getBytes("UTF-8"));
 			response.setContentType("text/json; charset=UTF-8");
+		}else if(action.equals("add")){
+			String name = request.getParameter("name");
+			String type = request.getParameter("type");
+			System.out.println(name+type);
+			int count = CategoryAction.addCategory(name, Integer.parseInt(type));
+			JSONStringer stringer = new JSONStringer();
+			stringer.array();
+			if(count!=0){
+				stringer.object().key("success").value("true").endObject();
+			}else{
+				stringer.object().key("success").value("false").endObject();
+			}
+			stringer.endArray();
+			response.getOutputStream().write(stringer.toString().getBytes("UTF-8"));
+			response.setContentType("text/json; charset=UTF-8"); 
 		}
 		
 	}

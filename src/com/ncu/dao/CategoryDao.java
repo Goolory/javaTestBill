@@ -92,9 +92,38 @@ public class CategoryDao {
 			PreparedStatement st = null;
 			try {
 				conn = DBUtil.getConnection();
-				String sql = "delete from record where id=?";
+				String sql = "delete from category where id=?";
 				st = conn.prepareStatement(sql);
 				st.setInt(1, id);
+				count = st.executeUpdate();
+				return count;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return 0;
+			}
+			finally{
+				try {
+					if(st!=null){
+						st.close();
+						st = null;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+		//Ìí¼Ó
+		public int add(String name,int type){
+			int count;
+			Connection conn = null;
+			PreparedStatement st = null;
+			try {
+				conn = DBUtil.getConnection();
+				String sql = "insert into category (name,type) values (?,?)";
+				st = conn.prepareStatement(sql);
+				st.setString(1, name);
+				st.setInt(2, type);
 				count = st.executeUpdate();
 				return count;
 			} catch (SQLException e) {
