@@ -13,9 +13,20 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
         var index = layer.load(1);
         //模拟数据
         var data = new Array();
-        for (var i = 0; i < 30; i++) {
-            data.push({ id: i + 1, num:'1', category:'工资', member:'父亲', sum:'￥120', date: '2017-3-26 15:56'});
-        }
+
+         var html = $.ajax({
+                type: "GET",
+                url: "../CostService?action=find",
+                async: false
+             }).responseText;
+         var jsonobj = JSON.parse(html);
+         for (var i = 0; i < jsonobj.length; i++) {
+             data.push({ id: jsonobj[i].id, num:jsonobj[i].num, category:jsonobj[i].category, member:jsonobj[i].member, sum:jsonobj[i].sum, date: jsonobj[i].date});
+         }
+
+//        for (var i = 0; i < 4; i++) {
+//            data.push({ id: i + 1, num:'1', category:'工资', member:'父亲', sum:'￥120', date: '2017-3-26 15:56'});
+//        }
         //模拟数据加载
         setTimeout(function () {
             layer.close(index);
@@ -27,16 +38,15 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             data = data.slice(skip, take);
             var html = '';  //由于静态页面，所以只能作字符串拼接，实际使用一般是ajax请求服务器数据
             html += '<table style="" class="layui-table" lay-even>';
-            html += '<colgroup><col width="60"><col width="90"><col width="150"><col width="150"><col width="180"><col width="180"><col width="150"></colgroup>';
-            html += '<thead><tr><th><form class="layui-form" action=""><input type="checkbox" lay-filter="select_all" title="全选"></form></th><th>编号</th><th>类别</th><th>成员</th><th>总额</th><th>日期</th><th colspan="2">操作</th></tr></thead>';
+            html += '<colgroup><col width="60"><col width="150"><col width="150"><col width="180"><col width="180"><col width="150"></colgroup>';
+            html += '<thead><tr><th><form class="layui-form" action=""><input type="checkbox" lay-filter="select_all" title="全选"></form></th><th>类别</th><th>成员</th><th>总额</th><th>日期</th><th colspan="2">操作</th></tr></thead>';
             html += '<tbody>';
             //遍历文章集合
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
                 html += "<tr>";
                 html += '<td><input type="checkbox" name="myselect"></td>'
-                html += "<td>" + item.num + "</td>";
-                html += "<td>" + item.category + "</td>";
+                html += "<td id="+ item.id + ">" + item.category + "</td>";
                 html += "<td>" + item.member + "</td>";
                 html += "<td>" + item.sum + "</td>";
                 html += "<td>" + item.date + "</td>";              
@@ -66,72 +76,68 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                     }
                 }
             });
-            //该模块是我定义的拓展laypage，增加设置页容量功能
-            //laypageId:laypage对象的id同laypage({})里面的cont属性
-            //pagesize当前页容量，用于显示当前页容量
-            //callback用于设置pagesize确定按钮点击时的回掉函数，返回新的页容量
             layui.pagesize(laypageId, pageSize).callback(function (newPageSize) {
-                //这里不能传当前页，因为改变页容量后，当前页很可能没有数据
                 initilData(1, newPageSize);
             });
         }, 500);
     }
 
-    //监听置顶CheckBox
-    form.on('checkbox(top)', function (data) {
-        var index = layer.load(1);
-        setTimeout(function () {
-            layer.close(index);
-            if (data.elem.checked) {
-                data.elem.checked = false;
-            }
-            else {
-                data.elem.checked = true;
-            }
-            layer.msg('操作失败，返回原来状态');
-            form.render();  //重新渲染
-        }, 300);
-    });
-
-    //监听推荐CheckBox
-    form.on('checkbox(recommend)', function (data) {
-        var index = layer.load(1);
-        setTimeout(function () {
-            layer.close(index);
-            layer.msg('操作成功');
-        }, 300);
-    });
-
-    //监听全选
-    form.on('checkbox(select_all)', function () {
-        var x=document.getElementsByName("myselect");
-        for(i=0;i<x.length;i++){           
-            if(x[i].checked){
-                x[i].checked=false;
-            }else{
-                x[i].checked=true;
-            }
-        };
-    });
-
-    //添加数据
+    //监听添加信息
     $('#add').on('click', function () {
         layer.open({
             type: 2,
             title: '添加信息',
             content: ['in_add.html', 'no'],
             btn: ['确定', '取消'],
-            area: ['500px', '500px'],
-            yes: function (index, layero) {
-                //这是核心的代码。
-                parent.tab.tabAdd({
-                    href: $(layero).find('input[name=url]').val(), //地址
-                    title: $(layero).find('input[name=title]').val()
-                });
+            area: ['600px', '500px'],
+            yes: function (index, layero) { 
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                var html = "<tr>";
+                html += '<td><input type="checkbox" name="myselect"></td>'
+                html += "<td id="+ 7 + ">" + body.find("select#cate").val() + "</td>";
+                html += "<td>" + body.find("select#member").val() + "</td>";
+                html += "<td>￥" + body.find("input#number").val() + "</td>";
+                html += "<td>" + body.find("input#date").val() + "</td>";              
+                html += '<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData(\'' + 7 + '\')"><i class="layui-icon">&#xe642;</i></button></td>';
+                html += '<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData(\'' + 7 + '\')"><i class="layui-icon">&#xe640;</i></button></td>';
+                html += "</tr>";
+                $("tbody").append(html);
+                form.render();  //重新渲染   
+                layer.close(index);   
             },
-            shade: false,
-            maxmin: true
-        });
+         });
+    });
+
+    //监听删除
+    $('#del').on('click', function () {
+        layer.confirm('确定删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            layer.msg('删除成功'); 
+            var x=document.getElementsByName("myselect");
+            var cout = 0;
+            for(i=0;i < x.length;i++){
+                if(x[i-cout].checked){
+                   $("tbody>tr").eq(i-cout).remove();
+                   cout++;
+                }       
+            };
+        }, function () {
+            layer.msg('取消');
+        });      
+    });
+
+    //监听全选
+    form.on('checkbox(select_all)', function (data) {
+        var x=document.getElementsByName("myselect");
+        for(i=0;i<x.length;i++){           
+            if(data.elem.checked){
+                x[i].checked=true;
+            }else{
+                x[i].checked=false;
+            }
+        };
     });
 
     //输出接口，主要是两个函数，一个删除一个编辑
@@ -140,14 +146,40 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             layer.confirm('确定删除？', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                layer.msg('删除Id为【' + id + '】的数据');
+                layer.msg('删除成功'); 
+                $("td#"+id).parent().remove();
             }, function () {
-
+                layer.msg('取消');
             });
         },
-        editData: function (id) {
-            layer.msg('编辑Id为【' + id + '】的数据');
+        editData: function (id, layero) {
+            layer.open({
+                type: 2,
+                title: '添加信息',
+                content: ['in_add.html', 'no'],
+                btn: ['确定', '取消'],
+                area: ['600px', '500px'],
+                yes: function (index, layero) { 
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+
+                    $("td#"+id).text(body.find("select#cate").val());
+                    $("td#"+id).next().text(body.find("select#member").val());
+                    $("td#"+id).next().next().text('￥' + body.find("input#number").val());
+                    $("td#"+id).next().next().next().text(body.find("input#date").val());
+                    form.render();  //重新渲染   
+                    layer.close(index);   
+                },
+                success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    body.find("select#cate").val($("td#"+id).text());
+                    body.find("select#member").val($("td#"+id).next().text());
+                    body.find("input#number").val($("td#"+id).next().next().text().substr(1));
+                    body.find("input#date").val($("td#"+id).next().next().next().text());
+                }
+            });
         }
     };
-    exports('datalist', datalist);
+    exports('datalist', datalist);  
 });

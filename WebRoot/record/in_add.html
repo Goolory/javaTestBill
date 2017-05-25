@@ -11,55 +11,53 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="format-detection" content="telephone=no">
 
-		<link rel="stylesheet" href="../../plugin/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../plugin/layui/css/layui.css" media="all" />
 	</head>
 
 	<body>
-		<div style="margin: 15px;">
+	<script type="text/javascript" src="../plugin/layui/layui.js"></script>
+        <div class="layui-form">	
+			<div class="layui-form-item">
+				<label class="layui-form-label">类别</label>
+				<div class="layui-input-block">
+					<select name="cate" id="cate">
+						<option value="请选择"></option>
+						<option value="工资">工资</option>
+						<option value="理财">理财</option>
+						<option value="奖金">奖金</option>
+						<option value="股票">股票</option>
+					</select>
+				</div>
+ 
+                <label class="layui-form-label">成员</label>
+				<div class="layui-input-block">
+					<select name="member" id="member">
+						<option value="请选择"></option>
+						<option value="父亲">父亲</option>
+						<option value="母亲">母亲</option>
+						<option value="我">我</option>
+						<option value="妹妹">妹妹</option>
+					</select>
+				</div>
 
-			<form class="layui-form" action="">	
-				<div class="layui-form-item">
-					<label class="layui-form-label">类别</label>
+				<div class="layui-inline">
+					<label class="layui-form-label">金额</label>
+					<div class="layui-input-inline">
+						<input type="number" id="number" lay-verify="number" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<label class="layui-form-label">日期</label>
 					<div class="layui-input-block">
-						<select name="cate" lay-filter="aihao">
-							<option value="请选择"></option>
-							<option value="0">工资</option>
-							<option value="1">理财</option>
-							<option value="3">奖金</option>
-							<option value="4">股票</option>
-						</select>
+						<input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-mm-dd" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})">
 					</div>
-
-                    <label class="layui-form-label">成员</label>
-					<div class="layui-input-block">
-						<select name="member" lay-filter="aihao">
-							<option value="请选择"></option>
-							<option value="0">父亲</option>
-							<option value="1">母亲</option>
-							<option value="3">我</option>
-							<option value="4">妹妹</option>
-						</select>
-					</div>
-
-					<div class="layui-inline">
-						<label class="layui-form-label">金额</label>
-						<div class="layui-input-inline">
-							<input type="number" name="number" lay-verify="number" autocomplete="off" class="layui-input">
-						</div>
-					</div>
-
-					<div class="layui-inline">
-						<label class="layui-form-label">日期</label>
-						<div class="layui-input-block">
-							<input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-mm-dd" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})">
-						</div>
-					</div>
-				</div>			
-			</form>
+				</div>
+			</div>			
 		</div>
-		<script type="text/javascript" src="../../plugin/layui/layui.js"></script>
-		<script>
-			layui.use(['form', 'layedit', 'laydate'], function() {
+		<div id="data"></div>
+		<script>	
+			layui.use(['form', 'layedit', 'laydate','layer'], function() {
 				var form = layui.form(),
 					layer = layui.layer,
 					layedit = layui.layedit,
@@ -88,6 +86,8 @@
 					return false;
 				});
 			});
+
+
 		</script>
 	</body>
 

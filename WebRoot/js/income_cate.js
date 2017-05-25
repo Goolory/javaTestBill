@@ -13,15 +13,18 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
         var index = layer.load(1);
         //模拟数据
         var data = new Array();
-        // for (var i = 0; i < 30; i++) {
-        //     data.push({ id: i + 1, num: '1', name: '衣服' });
-        // }
-        data.push({ id: 1,  name: '理财' });
-        data.push({ id: 2,  name: '工资' });
-        data.push({ id: 3,  name: '股票' });
-        data.push({ id: 4,  name: '年终奖' });
-        data.push({ id: 1,  name: '理财' });
-        data.push({ id: 2,  name: '工资' });
+        
+        var html = $.ajax({
+            type: "GET",
+            url: "CategoryService?action=costType",
+            async: false
+         }).responseText;
+     var jsonobj = JSON.parse(html);
+         for (var i = 0; i < jsonobj.length; i++) {
+             data.push({ id: jsonobj[i].id,  name: jsonobj[i].name });
+         }
+        // data.push({ id: jsonobj[i].id, num:jsonobj[i].num, category:jsonobj[i].category, member:jsonobj[i].member, sum:jsonobj[i].sum, date: jsonobj[i].date});
+       
 
         //模拟数据加载
         setTimeout(function () {
@@ -40,7 +43,7 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
             //遍历文章集合
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
-                html += "<tr>";
+                html += '<tr>';
                 html += '<td><input type="checkbox" name="myselect"></td>'
                 html += "<td id="+ item.id + ">" + item.name + "</td>";
                 html += '<td><form class="layui-form"><input type="checkbox" value="' + item.id + '" lay-filter="recommend" lay-skin="switch" checked /></form></td>';
@@ -142,18 +145,16 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
     //监听删除
     $('#del').on('click', function () {
         layer.msg('删除');
+        
         var x=document.getElementsByName("myselect");
         var cout = 0;
         for(i=0;i < x.length;i++){
             if(x[i-cout].checked){
-        //        alert(i);
-               $("tbody>tr").eq(i-cout).remove();
-               cout++;
+              $("tbody>tr").eq(i-cout).remove();
+              cout++;
             }       
-        }; 
-         // $("tbody>tr").eq(3).remove();
-         // $("tbody>tr").eq(1).remove();
-        // $("tbody>tr").eq(1).remove();
+        };
+       $("tbody>tr").eq(i-cout+1).remove();
     });
 
     //监听全选

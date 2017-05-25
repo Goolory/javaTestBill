@@ -3,11 +3,16 @@ package com.ncu.entity;
 import java.util.Date;
 
 public class Records {
+	private int id;
 	private int type_id;
 	private int category_id;
 	private int member_id;
 	private double sum;
 	private Date date;
+	
+	public int getId() {
+		return id;
+	}
 	public int getTypeId() {
 		return type_id;
 	}
@@ -38,4 +43,5 @@ public class Records {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
 }
