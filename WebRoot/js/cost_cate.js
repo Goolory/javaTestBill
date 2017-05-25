@@ -26,7 +26,7 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             url: "CategoryService?action=costType",
             async: false
          }).responseText;
-     var jsonobj = JSON.parse(html);
+         var jsonobj = JSON.parse(html);
          for (var i = 0; i < jsonobj.length; i++) {
              data.push({ id: jsonobj[i].id,  name: jsonobj[i].name });
          }

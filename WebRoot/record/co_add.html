@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<title>表单</title>
-		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="format-detection" content="telephone=no">
+<head>
+<meta charset="utf-8">
+<title>表单</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
 
-		<link rel="stylesheet" href="../plugin/layui/css/layui.css" media="all" />
-	</head>
+<link rel="stylesheet" href="../plugin/layui/css/layui.css" media="all" />
+</head>
 
-	<body>
-		<div style="margin: 15px;">
+<body>
+	<div style="margin: 15px;">
 
-			<form class="layui-form" action="">	
-				<div class="layui-form-item">
-					<label class="layui-form-label">类别</label>
-					<div class="layui-input-block">
-						<select id="cate" lay-filter="aihao">
-							<option value="请选择"></option>
-							<option value="衣服">衣服</option>
-							<option value="食品">食品</option>
-							<option value="交通">交通</option>
-							<option value="旅游">旅游</option>
-						</select>
-					</div>
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">类别</label>
+				<div class="layui-input-block">
+					<select id="cate" lay-filter="aihao">
+						<option value="请选择"></option>
+						<option value="衣服">衣服</option>
+						<option value="食品">食品</option>
+						<option value="交通">交通</option>
+						<option value="旅游">旅游</option>
+					</select>
+				</div>
 
-                    <label class="layui-form-label">成员</label>
+				<label class="layui-form-label">成员</label>
 				<div class="layui-input-block">
 					<select name="member" id="member">
 						<option value="请选择"></option>
@@ -44,51 +45,51 @@
 				<div class="layui-inline">
 					<label class="layui-form-label">金额</label>
 					<div class="layui-input-inline">
-						<input type="number" id="number" lay-verify="number" autocomplete="off" class="layui-input">
+						<input type="number" id="number" lay-verify="number"
+							autocomplete="off" class="layui-input">
 					</div>
 				</div>
 
 				<div class="layui-inline">
 					<label class="layui-form-label">日期</label>
 					<div class="layui-input-block">
-						<input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-mm-dd" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})">
+						<input type="text" name="date" id="date" lay-verify="date"
+							placeholder="yyyy-mm-dd" autocomplete="off" class="layui-input"
+							onclick="layui.laydate({elem: this})">
 					</div>
 				</div>
-				</div>			
-			</form>
-		</div>
-		<script type="text/javascript" src="../plugin/layui/layui.js"></script>
-		<script>
-			layui.use(['form', 'layedit', 'laydate'], function() {
-				var form = layui.form(),
-					layer = layui.layer,
-					layedit = layui.layedit,
-					laydate = layui.laydate;
-
-				//创建一个编辑器
-				var editIndex = layedit.build('LAY_demo_editor');
-				//自定义验证规则
-				form.verify({
-					title: function(value) {
-						if(value.length < 5) {
-							return '标题至少得5个字符啊';
-						}
-					},
-					pass: [/(.+){6,12}$/, '密码必须6到12位'],
-					content: function(value) {
-						layedit.sync(editIndex);
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="../plugin/layui/layui.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+	<script>
+		layui.use([ 'form', 'layedit', 'laydate' ], function() {
+			//创建一个编辑器
+			var editIndex = layedit.build('LAY_demo_editor');
+			//自定义验证规则
+			form.verify({
+				title : function(value) {
+					if (value.length < 5) {
+						return '标题至少得5个字符啊';
 					}
-				});
-
-				//监听提交
-				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
-					return false;
-				});
+				},
+				pass : [ /(.+){6,12}$/, '密码必须6到12位' ],
+				content : function(value) {
+					layedit.sync(editIndex);
+				}
 			});
-		</script>
-	</body>
+	
+			//监听提交
+			form.on('submit(demo1)', function(data) {
+				layer.alert(JSON.stringify(data.field), {
+					title : '最终的提交信息'
+				})
+				return false;
+			});
+		});
+	</script>
+	<scrip> </scrip>
+</body>
 
 </html>

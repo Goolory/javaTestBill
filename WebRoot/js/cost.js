@@ -100,6 +100,25 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                 form.render();  //重新渲染   
                 layer.close(index);   
             },
+            success: function(layero, index){
+            	
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                
+                var html = $.ajax({
+    				type : "GET",
+    				url : "http://localhost:8080/bill/CategoryService?action=costType",
+    				async : false
+    			}).responseText;
+    			var jsonobj = JSON.parse(html);
+    			var text = '<option value="请选择"></option>';    			
+    			for (var i = 0; i < jsonobj.length; i++) {
+    				text += "<option value=" + jsonobj[i].name + ">" + jsonobj[i].name + "</option>";
+    			}
+    			body.find("select#cate").append(text);
+    			form.render();  //重新渲染   
+    			alert(body.find("select#cate").html());
+            }
         });
     });
 
@@ -160,7 +179,7 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                 },
                 success: function(layero, index){
                     var body = layer.getChildFrame('body', index);
-                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var iframeWin = window[layero.find('iframe')[0]['name']];      			
                     body.find("select#cate").val($("td#"+id).text());
                     body.find("select#member").val($("td#"+id).next().text());
                     body.find("input#number").val($("td#"+id).next().next().text().substr(1));
