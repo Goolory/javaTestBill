@@ -16,7 +16,7 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
 
          var html = $.ajax({
                 type: "GET",
-                url: "../CostService?action=find",
+                url: "../IncomeService?action=find",
                 async: false
              }).responseText;
          var jsonobj = JSON.parse(html);

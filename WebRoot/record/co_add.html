@@ -21,13 +21,9 @@
 		<form class="layui-form" action="">
 			<div class="layui-form-item">
 				<label class="layui-form-label">类别</label>
-				<div class="layui-input-block">
+				<div class="layui-input-block" >
 					<select id="cate" lay-filter="aihao">
 						<option value="请选择"></option>
-						<option value="衣服">衣服</option>
-						<option value="食品">食品</option>
-						<option value="交通">交通</option>
-						<option value="旅游">旅游</option>
 					</select>
 				</div>
 
@@ -35,10 +31,6 @@
 				<div class="layui-input-block">
 					<select name="member" id="member">
 						<option value="请选择"></option>
-						<option value="父亲">父亲</option>
-						<option value="母亲">母亲</option>
-						<option value="我">我</option>
-						<option value="妹妹">妹妹</option>
 					</select>
 				</div>
 
@@ -65,31 +57,45 @@
 	<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
 	<script>
 		layui.use([ 'form', 'layedit', 'laydate' ], function() {
-			//创建一个编辑器
-			var editIndex = layedit.build('LAY_demo_editor');
-			//自定义验证规则
-			form.verify({
-				title : function(value) {
-					if (value.length < 5) {
-						return '标题至少得5个字符啊';
-					}
-				},
-				pass : [ /(.+){6,12}$/, '密码必须6到12位' ],
-				content : function(value) {
-					layedit.sync(editIndex);
-				}
-			});
-	
-			//监听提交
-			form.on('submit(demo1)', function(data) {
-				layer.alert(JSON.stringify(data.field), {
-					title : '最终的提交信息'
-				})
-				return false;
-			});
+			
 		});
 	</script>
-	<scrip> </scrip>
+	<script>
+		$(function(){
+			var cate = $("#cate");
+			var member = $("#member");
+			$.ajax({
+				url:"../CategoryService?action=costType",
+				type:"GET",
+				success:function(result){
+					if(result!=null){
+					var htmlC="";
+					for(var i=0;i<result.length;i++){
+						htmlC += "<option value="+result[i].id+">"+result[i].name+"</option>";
+						}
+						cate.append(htmlC).trigger("create");
+					}
+					
+				}
+			})
+			
+			$.ajax({
+				url:"../MemberService?action=find",
+				type:"GET",
+				success:function(result){
+					if(result!=null){
+					var html="";
+					for(var i=0;i<result.length;i++){
+						html += "<option value="+result[i].id+">"+result[i].name+"</option>";
+						}
+						member.append(html).trigger("create");
+					}
+					
+				}
+			})
+		})
+	</script>
+	
 </body>
 
 </html>

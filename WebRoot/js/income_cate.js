@@ -121,11 +121,14 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
             area: ['350px', '250px'],
             yes: function (index, layero) {
                 //这是核心的代码。
-                // parent.tab.tabAdd({
-                //     href: $(layero).find('input[name=url]').val(), //地址
-                //     icon: $(layero).find('input[name=icon]').val(),
-                //     title: $(layero).find('input[name=title]').val()
-                // });
+            	var name = $(layero).find('input[name=url]').val();
+            	var html = $.ajax({
+                    type: "GET",
+                    url: "CategoryService?action=add&name="+name+"&type="+1,
+                    async: false
+                 }).responseText;
+            	var jsonobj = JSON.parse(html);
+            	if(jsonobj[0].success=="true"){
                 html = "<tr>";
                 html += '<td><input type="checkbox" name="myselect"></td>'
                 html += "<td id="+ 5 + ">" + $(layero).find('input[name=url]').val() + "</td>";
@@ -134,6 +137,8 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
                 html += '<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData(\'' + 5 + '\')"><i class="layui-icon">&#xe640;</i></button></td>';
                 html += "</tr>";
                 $("td#1").parent().parent().append(html);
+            	}
+            	initilData(1, 8);
                 form.render();  //重新渲染   
                 layer.close(index);            
             },
@@ -199,6 +204,15 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
                 area: ['350px', '250px'],
                 yes: function (index, layero) { 
                     $("td#"+id).text($(layero).find('input[name=url]').val());
+                    var html = $.ajax({
+                        type: "GET",
+                        url: "CategoryService?action=update&id="+id+"&name="+$(layero).find('input[name=url]').val(),
+                        async: false
+                     }).responseText;
+                	var jsonobj = JSON.parse(html);
+                	if(jsonobj[0].success){
+                		layer.msg('修改成功');
+                	}
                     form.render();  //重新渲染   
                     layer.close(index);           
                 },

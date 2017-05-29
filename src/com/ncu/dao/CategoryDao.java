@@ -10,6 +10,7 @@ import com.ncu.dbUtil.DBUtil;
 import com.ncu.entity.Category;
 
 public class CategoryDao {
+	
 	//查询所有支出类别
 		public ArrayList<Category> getAll(int type){
 			ArrayList<Category> rList = new ArrayList<Category>();
@@ -142,4 +143,5 @@ public class CategoryDao {
 				
 			}
 		}
+
 }

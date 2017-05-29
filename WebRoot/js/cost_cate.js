@@ -135,7 +135,6 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                     async: false
                  }).responseText;
             	var jsonobj = JSON.parse(html);
-            	console.log(jsonobj[0].success);
             	if(jsonobj[0].success=="true"){
             		html = "<tr>";
                     html += '<td><input type="checkbox" name="myselect"></td>'
@@ -219,7 +218,6 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                         async: false
                      }).responseText;
                 	var jsonobj = JSON.parse(html);
-                	console.log();
                 	if(jsonobj[0].success){
                 		layer.msg('修改成功');
                 	}

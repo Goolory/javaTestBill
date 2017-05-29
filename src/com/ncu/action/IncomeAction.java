@@ -2,29 +2,24 @@ package com.ncu.action;
 
 import java.util.ArrayList;
 
+import com.ncu.dao.RecordDao;
 import com.ncu.model.CostModel;
+import com.ncu.model.FormModel;
+import com.ncu.model.WeekModel;
 
 public class IncomeAction {
-	public static ArrayList<CostModel> getRecordCost(){
+	private static RecordDao recordDao = new RecordDao();
+	public static ArrayList<CostModel> getRecordIncome(){
 		ArrayList<CostModel> costModel = new ArrayList<CostModel>();
-//		========================================
-//		RecordDao recordDao = new RecordDao();
-//		ArrayList<Records> rList = recordDao.getAllCost();
-//		for (Records r : rList) {
-//			
-//		}
-//		========================================
-		for (int i = 0; i < 2; i++) {
-			CostModel c = new CostModel();
-			c.setId(1);
-			c.setMemberName("父亲");
-			c.setSum(233);
-			c.setTypeName("衣服");
-			c.setDate(null);
-			costModel.add(c);
-		}
+		costModel = recordDao.getAllCostModel(1);
 		return costModel;
-		
-		
 	}
+	//按收入类别分类
+		public static ArrayList<FormModel> findFormModel(){
+			return recordDao.findFormModel(1);
+		}
+		//收入折线图
+		public static ArrayList<WeekModel> findWeekMode(){
+			return recordDao.findWeekModel(1);
+		}
 }
