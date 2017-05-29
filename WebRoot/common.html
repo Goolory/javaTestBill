@@ -58,29 +58,34 @@
     </style>
 </head>
 <body>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
-<!--         <legend style="text-align:center;">控制台</legend> -->
         <blockquote class="layui-elem-quote">
             <a href="javascript:;" class="layui-btn layui-btn-small" id="add">
-                <i class="layui-icon">&#xe608;</i> 添加信息
+                <i class="layui-icon">&#xe608;</i> 添加
             </a>
-            <button class="layui-btn layui-btn-small layui-btn-normal" id="del"><i class="layui-icon"></i> 删除</button>
-            <form class="layui-form" style="float:right;">
+            <button class="layui-btn layui-btn-small layui-btn-normal" id="del"><i class="layui-icon"></i> 删除</button>
+            <div class="layui-form" style="float:right;">
                 <div class="layui-form-item" style="margin:0;">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="name" placeholder="支持模糊查询.." autocomplete="off" class="layui-input">
+                        <input type="text" name="name" placeholder="请输入.." autocomplete="off" class="layui-input" id="keyword">
                     </div>
                     <div class="layui-form-mid layui-word-aux" style="padding:0;">
-                        <button lay-filter="search" class="layui-btn" lay-submit><i class="layui-icon" aria-hidden="true">&#xe615;</i> 查询</button>
+                        <button lay-filter="search" class="layui-btn" onclick="Search()()"><i class="layui-icon" aria-hidden="true">&#xe615;</i> 查询</button>
                     </div>
                 </div>
-            </form>
+            </div>
         </blockquote>
         <div class="layui-field-box">
-            <div id="dataContent" class="">
-                <!--内容区域 ajax获取-->
-
+            <div class="">
+                <table style="" class="layui-table" lay-even>
+                    <colgroup><col width="90"><col width="180"><col width="90"><col width="90"><col width="50"><col width="50"></colgroup>
+                    <thead><tr><th><form class="layui-form"><input type="checkbox" lay-filter="select_all" title="全选" name="all"></form></th><th>名称</th><th>有效性</th><th colspan="2">操作</th></tr></thead>
+                    <tbody id="dataContent">
+                        <!--内容区域 ajax获取-->
+                    </tbody>
+                </table>
                 <div id="pageNav"></div>
             </div>
         </div>
@@ -91,7 +96,7 @@
     <script type="text/javascript">
         layui.config({
             base: 'js/'
-        }).use('member');
+        }).use('common');
     </script>
 </body>
 </html>

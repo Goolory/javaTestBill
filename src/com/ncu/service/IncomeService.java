@@ -50,7 +50,7 @@ public class IncomeService extends HttpServlet {
 					key("num").value(costModel.get(i).getTypeName()).
 					key("category").value(costModel.get(i).getTypeName()).
 					key("member").value(costModel.get(i).getMemberName()).
-					key("sum").value("гд"+costModel.get(i).getSum()).
+					key("sum").value(costModel.get(i).getSum()).
 					key("date").value(costModel.get(i).getDate()).endObject();
 			}
 			stringer.endArray();
@@ -84,8 +84,9 @@ public class IncomeService extends HttpServlet {
 				stringer.endArray();
 			}
 
-		}else if(action=="update"){
+		}else if(action.equals("update")){
 			String id = request.getParameter("id");
+			System.out.println(id+"idididdi");
 			String category_id = request.getParameter("category_id");
 			String member_id = request.getParameter("member_id");
 			String number = request.getParameter("number");
@@ -113,7 +114,7 @@ public class IncomeService extends HttpServlet {
 				stringer.object().key("success").value("false").endObject();
 				stringer.endArray();
 			}
-		}else if(action=="delete"){
+		}else if(action.equals("delete")){
 			String id = request.getParameter("id");
 			int count;
 			if(id!=""){
@@ -126,7 +127,7 @@ public class IncomeService extends HttpServlet {
 				}
 				stringer.endArray();
 			}
-		}else if(action=="form"){
+		}else if(action.equals("form")){
 			ArrayList<FormModel> fList = new ArrayList<FormModel>();
 			fList = IncomeAction.findFormModel();
 			stringer.array();
@@ -135,7 +136,7 @@ public class IncomeService extends HttpServlet {
 					key("sum").value(fList.get(i).getSum()).endObject();
 			}
 			stringer.endArray();
-		}else if(action=="week"){
+		}else if(action.equals("week")){
 			ArrayList<WeekModel> wList = new ArrayList<WeekModel>();
 			wList = IncomeAction.findWeekMode();
 			stringer.array();

@@ -44,21 +44,21 @@
                     <li class="layui-nav-item">
                         <a href="javascript:;" data-url="index.html"><i class="fa fa-file-text"></i>分类管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;" data-url="income_cate.html" data-id="1">收入类别</a></dd>
-                            <dd><a href="javascript:;" data-url="cost_cate.html" data-id="2">支出类别</a></dd>
+                            <dd><a href="javascript:;" data-url="common.html?id=1" data-id="1">收入类别</a></dd>
+                            <dd><a href="javascript:;" data-url="common.html?id=2" data-id="2">支出类别</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
                         <a href="javascript:;"><i class="fa fa-user"></i>成员管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;" data-url="member.html" data-id="3">成员信息</a></dd>
+                            <dd><a href="javascript:;" data-url="common.html?id=3" data-id="3">成员信息</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
                         <a href="javascript:;"><i class="fa fa-wrench"></i>收支管理</a>
                         <dl class="layui-nav-child">    
-                            <dd><a href="javascript:;" data-url="record/income.html" data-id="5">收入日志</a></dd>
-                            <dd><a href="javascript:;" data-url="record/cost.html" data-id="6">支出日志</a></dd>
+                            <dd><a href="javascript:;" data-url="record.html?id=1" data-id="5">收入日志</a></dd>
+                            <dd><a href="javascript:;" data-url="record.html?id=2" data-id="6">支出日志</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
@@ -133,15 +133,16 @@
     </div>
     <!-- layui.js -->
     <script src="plugin/layui/layui.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <!-- layui规范化用法 -->
     <script type="text/javascript">
         layui.config({
             base: 'js/'
-        }).use('main');
+        }).use('index');
     </script>
 
     <script type="text/javascript">
-        Highcharts.chart('container', {
+        var mychart = new Highcharts.chart('container', {
             chart: {
                 type: 'spline'
             },
@@ -183,13 +184,8 @@
                 marker: {
                     symbol: 'square'
                 },
-                data: [7.0, 18.2, 21.5, 25.2, {
-                    y: 26.5,
-                    marker: {
-                        symbol: 'url(index.html)'
-                    }
-                }, 23.3, 9.6]
-
+                // data: [7.0, 18.2, 21.5, 25.2, 26.5, 23.3, 9.6
+                // ]
             }, {
                 name: '支出',
                 marker: {
@@ -197,12 +193,54 @@
                 },
                 data: [{
                     y: 3.9,
-                    marker: {
-                        symbol: 'url(index.html)'
-                    }
                 }, 4.2, 16.6, 14.2, 10.3, 6.6, 4.8]
             }]
         });
+
+        function getIncomeData(){
+        	console.log("1111");
+            var list = new Array();
+            var html = $.ajax({
+               type: "GET",
+               url:  "IncomeService?action=week",
+               async: false
+            }).responseText;     
+            var datalist = JSON.parse(html);
+            // generate an array of random data
+            var data = [],i;
+            for (i = 0; i < datalist.length; i++) {
+               data.push({
+                  name: datalist[i].cate,
+                  y: datalist[i].sum
+               });
+            }
+            return data;
+        }
+        
+        function getCostData(){
+            var list = new Array();
+            var html = $.ajax({
+               type: "GET",
+               url:  "CostService?action=week",
+               async: false
+            }).responseText;     
+            var datalist = JSON.parse(html);
+            // generate an array of random data
+            var data = [],i;
+            for (i = 0; i < datalist.length; i++) {
+               data.push({
+                  name: datalist[i].cate,
+                  y: datalist[i].sum
+               });
+            }
+            return data;
+        }
+
+        var data = [];
+        data = getIncomeData();
+        data.push(7.0, 18.2, 21.5, 25.2, 26.5, 23.3, 9.6)
+        mychart.series[0].setData(data);
+    //    mychart.series[0].setData(data);
     </script>
 </body>
 </html>

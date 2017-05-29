@@ -1,107 +1,209 @@
-﻿/*
-
-@Name：不落阁后台模板源码 
-@Author：Absolutely 
-@Site：http://www.lyblogs.cn
-
-*/
-
-layui.define(['element', 'layer', 'form'], function (exports) {
-    var form = layui.form();
+﻿layui.define(['element', 'layer', 'form'], function (exports) {
     var $ = layui.jquery;
-    //自定义验证
-    form.verify({
-        passWord: [/^[\S]{6,12}$/, '密码必须6到12位'],
-        account: function (value) {
-            if (value.length <= 0 || value.length > 10) {
-                return "账号必须1到10位"
-            }
-            var reg = /^[a-zA-Z0-9]*$/;
-            if (!reg.test(value)) {
-                return "账号只能为英文或数字";
-            }
-        },
-        result_response: function (value) {
-            if (value.length < 1) {
-                return '请点击人机识别验证';
-            }
-        },
+    var element = layui.element();
+    var layer = layui.layer;
+    var form = layui.form();
+    //form.render();
+    //快捷菜单开关
+    $('span.sys-title').click(function (e) {
+        e.stopPropagation();    //阻止事件冒泡
+        $('div.short-menu').slideToggle('fast');
     });
-    //监听登陆提交
-    form.on('submit(login)', function (data) {
-        var index = layer.load(1);
-        setTimeout(function () {
-            //模拟登陆
-            layer.close(index);
-            if (data.field.account != 'lyblogscn' || data.field.password != '111111') {
-                layer.msg('账号或者密码错误', { icon: 5 });
-            } else {
-                layer.msg('登陆成功，正在跳转......', { icon: 6 });
-                layer.closeAll('page');
-                setTimeout(function () {
-                    location.href = "../html/main.html";
-                }, 1000);
-            }
-        }, 400);
-        return false;
+    $('div.short-menu').click(function (e) {
+        e.stopPropagation();    //阻止事件冒泡
     });
-    //检测键盘按下
-    $('body').keydown(function (e) {
-        if (e.keyCode == 13) {  //Enter键
-            if ($('#layer-login').length <= 0) {
-                login();
-            } else {
-                $('button[lay-filter=login]').click();
-            }
+    $(document).click(function () {
+        $('div.short-menu').slideUp('fast');
+        $('.individuation').removeClass('bounceInRight').addClass('flipOutY');
+    });
+    //个性化设置开关
+    $('#individuation').click(function (e) {
+        e.stopPropagation();    //阻止事件冒泡
+        $('.individuation').removeClass('layui-hide').toggleClass('bounceInRight').toggleClass('flipOutY');
+    });
+    $('.individuation').click(function (e) {
+        e.stopPropagation();    //阻止事件冒泡
+    })
+    $('.layui-body').click(function () {
+        $('.individuation').removeClass('bounceInRight').addClass('flipOutY');
+    });
+
+    //监听左侧导航点击
+    element.on('nav(leftnav)', function (elem) {
+        var url = $(elem).children('a').attr('data-url');   //页面url
+        var id = $(elem).children('a').attr('data-id');     //tab唯一Id
+        var title = $(elem).children('a').text();           //菜单名称
+        if (title == "首页") {
+            element.tabChange('tab', 0);
+            return;
+        }
+        if (url == undefined) return;
+
+        var tabTitleDiv = $('.layui-tab[lay-filter=\'tab\']').children('.layui-tab-title');
+        var exist = tabTitleDiv.find('li[lay-id=' + id + ']');
+        if (exist.length > 0) {
+            //切换到指定索引的卡片
+            element.tabChange('tab', id);
+        } else {
+            var index = layer.load(1);
+            //由于Ajax调用本地静态页面存在跨域问题，这里用iframe
+            setTimeout(function () {
+                //模拟菜单加载
+                layer.close(index);
+                element.tabAdd('tab', { title: title, content: '<iframe src="' + url + '" style="width:100%;height:100%;border:none;outline:none;"></iframe>', id: id });
+                //切换到指定索引的卡片
+                element.tabChange('tab', id);
+            }, 500);
         }
     });
 
-    $('.enter').on('click', login);
+    //监听快捷菜单点击
+    $('.short-menu .layui-field-box>div>div').click(function () {
+        var elem = this;
+        var url = $(elem).children('span').attr('data-url');
+        var id = $(elem).children('span').attr('data-id');
+        var title = $(elem).children('span').text();
 
-    function login() {
-        var loginHtml = ''; //静态页面只能拼接，这里可以用iFrame或者Ajax请求分部视图。html文件夹下有login.html
+        if (url == undefined) return;
 
-        loginHtml += '<form class="layui-form" action="">';
-        loginHtml += '<div class="layui-form-item">';
-        loginHtml += '<label class="layui-form-label">账号</label>';
-        loginHtml += '<div class="layui-input-inline pm-login-input">';
-        loginHtml += '<input type="text" name="account" lay-verify="account" placeholder="请输入账号" value="lyblogscn" autocomplete="off" class="layui-input">';
-        loginHtml += '</div>';
-        loginHtml += '</div>';
-        loginHtml += '<div class="layui-form-item">';
-        loginHtml += '<label class="layui-form-label">密码</label>';
-        loginHtml += '<div class="layui-input-inline pm-login-input">';
-        loginHtml += '<input type="password" name="password" lay-verify="passWord" placeholder="请输入密码" value="111111" autocomplete="off" class="layui-input">';
-        loginHtml += '</div>';
-        loginHtml += '</div>';
-        loginHtml += '<div class="layui-form-item">';
-        loginHtml += '<label class="layui-form-label">人机验证</label>';
-        loginHtml += '<div class="layui-input-inline pm-login-input">';
-        loginHtml += '<input type="text" name="result_response" placeholder="人机验证，百度螺丝帽" value="" autocomplete="off" class="layui-input">';
-        loginHtml += '</div>';
-        loginHtml += '</div>';
-        loginHtml += '<div class="layui-form-item" style="margin-top:25px;margin-bottom:0;">';
-        loginHtml += '<div class="layui-input-block">';
-        loginHtml += ' <button class="layui-btn" style="width:230px;" lay-submit="" lay-filter="login">立即登录</button>';
-        loginHtml += ' </div>';
-        loginHtml += ' </div>';
-        loginHtml += '</form>';
+        var tabTitleDiv = $('.layui-tab[lay-filter=\'tab\']').children('.layui-tab-title');
+        var exist = tabTitleDiv.find('li[lay-id=' + id + ']');
+        if (exist.length > 0) {
+            //切换到指定索引的卡片
+            element.tabChange('tab', id);
+        } else {
+            var index = layer.load(1);
+            //由于Ajax调用本地静态页面存在跨域问题，这里用iframe
+            setTimeout(function () {
+                //模拟菜单加载
+                layer.close(index);
+                element.tabAdd('tab', { title: title, content: '<iframe src="' + url + '" style="width:100%;height:100%;border:none;outline:none;"></iframe>', id: id });
+                //切换到指定索引的卡片
+                element.tabChange('tab', id);
+            }, 500);
+        }
+        $('div.short-menu').slideUp('fast');
+    });
 
-        layer.open({
-            id: 'layer-login',
-            type: 1,
-            title: false,
-            shade: 0.4,
-            shadeClose: true,
-            area: ['480px', '270px'],
-            closeBtn: 0,
-            anim: 1,
-            skin: 'pm-layer-login',
-            content: loginHtml
-        });
-        layui.form().render('checkbox');
+    //监听侧边导航开关
+    form.on('switch(sidenav)', function (data) {
+        if (data.elem.checked) {
+            showSideNav();
+            layer.msg('这个开关是layui的开关改编的');
+        } else {
+            hideSideNav();
+        }
+    });
+
+    //收起侧边导航点击事件
+    $('.layui-side-hide').click(function () {
+        hideSideNav();
+        $('input[lay-filter=sidenav]').siblings('.layui-form-switch').removeClass('layui-form-onswitch');
+        $('input[lay-filter=sidenav]').prop("checked", false);
+    });
+
+    //鼠标靠左展开侧边导航
+    $(document).mousemove(function (e) {
+        if (e.pageX == 0) {
+            showSideNav();
+            $('input[lay-filter=sidenav]').siblings('.layui-form-switch').addClass('layui-form-onswitch');
+            $('input[lay-filter=sidenav]').prop("checked", true);
+        }
+    });
+
+    //皮肤切换
+    $('.skin').click(function () {
+        var skin = $(this).attr("data-skin");
+        $('body').removeClass();
+        $('body').addClass(skin);
+    });
+
+    var ishide = false;
+    //隐藏侧边导航
+    function hideSideNav() {
+        if (!ishide) {
+            $('.layui-side').animate({ left: '-200px' });
+            $('.layui-side-hide').animate({ left: '-200px' });
+            $('.layui-body').animate({ left: '0px' });
+            $('.layui-footer').animate({ left: '0px' });
+            var tishi = layer.msg('鼠标靠左自动显示菜单', { time: 1500 });
+            layer.style(tishi, {
+                top: 'auto',
+                bottom: '50px'
+            });
+            ishide = true;
+        }
+    }
+    //显示侧边导航
+    function showSideNav() {
+        if (ishide) {
+            $('.layui-side').animate({ left: '0px' });
+            $('.layui-side-hide').animate({ left: '0px' });
+            $('.layui-body').animate({ left: '200px' });
+            $('.layui-footer').animate({ left: '200px' });
+            ishide = false;
+        }
     }
 
-    exports('index', {});
-});
 
+  //  runSteward();
+    //管家功能
+    function runSteward() {
+        var layerSteward;   //管家窗口
+        var isStop = false; //是否停止提醒 
+
+        getNotReplyLeaveMessage();
+
+        var interval = setInterval(function () {
+            getNotReplyLeaveMessage();
+        }, 60000);  //1分钟提醒一次
+
+        function getNotReplyLeaveMessage() {
+            clearInterval(interval); //停止计时器
+            var content = '<p>目前有<span>12</span>条留言未回复<a href="javascript:layer.msg(\'跳转到相应页面\')">点击查看</a></p>';
+            content += '<div class="notnotice" >不再提醒</div>';
+            layerSteward = layer.open({
+                type: 1,
+                title: '管家提醒',
+                shade: 0,
+                resize: false,
+                area: ['340px', '215px'],
+                time: 10000, //10秒后自动关闭
+                skin: 'steward',
+                closeBtn: 1,
+                anim: 2,
+                content: content,
+                end: function () {
+                    if (!isStop) {
+                        interval = setInterval(function () {
+                            if (!isStop) {
+                                clearInterval(interval);
+                                getNotReplyLeaveMessage();
+                            }
+                        }, 60000);
+                    }
+                }
+            });
+            $('.steward').click(function (e) {
+                event.stopPropagation();    //阻止事件冒泡
+            });
+            $('.notnotice').click(function () {
+                isStop = true;
+                layer.close(layerSteward);
+                $('input[lay-filter=steward]').siblings('.layui-form-switch').removeClass('layui-form-onswitch');
+                $('input[lay-filter=steward]').prop("checked", false);
+            });
+            form.on('switch(steward)', function (data) {
+                if (data.elem.checked) {
+                    isStop = false;
+                    clearInterval(interval);
+                    runSteward();
+                } else {
+                    isStop = true;
+                    layer.close(layerSteward);
+                }
+            })
+        }
+    }
+    exports('main', {});
+});

@@ -50,7 +50,7 @@ public class CostService extends HttpServlet {
 					key("num").value(costModel.get(i).getTypeName()).
 					key("category").value(costModel.get(i).getTypeName()).
 					key("member").value(costModel.get(i).getMemberName()).
-					key("sum").value("гд"+costModel.get(i).getSum()).
+					key("sum").value(costModel.get(i).getSum()).
 					key("date").value(costModel.get(i).getDate()).endObject();
 			}
 			stringer.endArray();
@@ -84,7 +84,7 @@ public class CostService extends HttpServlet {
 				stringer.endArray();
 			}
 
-		}else if(action=="update"){
+		}else if(action.equals("update")){
 			String id = request.getParameter("id");
 			String category_id = request.getParameter("category_id");
 			String member_id = request.getParameter("member_id");
@@ -114,7 +114,7 @@ public class CostService extends HttpServlet {
 				stringer.object().key("success").value("false").endObject();
 				stringer.endArray();
 			}
-		}else if(action=="delete"){
+		}else if(action.equals("delete")){
 			String id = request.getParameter("id");
 			int count;
 			if(id!=""){
@@ -127,23 +127,28 @@ public class CostService extends HttpServlet {
 				}
 				stringer.endArray();
 			}
-		}else if(action=="select"){
+		}else if(action.equals("select")){
 			String category_id = request.getParameter("category_id");
-			String note = request.getParameter("note");
+			String note = request.getParameter("category_id");
+			System.out.println(note);
 			ArrayList<CostModel> costModel = CostAction.findByA(Integer.parseInt(category_id), note);
 			
 			stringer.array();
-			for(int i=0;i<costModel.size();i++){
-				stringer.object().key("id").value(costModel.get(i).getId()).
-					key("num").value(costModel.get(i).getTypeName()).
-					key("category").value(costModel.get(i).getTypeName()).
-					key("member").value(costModel.get(i).getMemberName()).
-					key("sum").value("гд"+costModel.get(i).getSum()).
-					key("date").value(costModel.get(i).getDate()).endObject();
+			if(costModel!=null){
+				for(int i=0;i<costModel.size();i++){
+					stringer.object().key("id").value(costModel.get(i).getId()).
+						key("num").value(costModel.get(i).getTypeName()).
+						key("category").value(costModel.get(i).getTypeName()).
+						key("member").value(costModel.get(i).getMemberName()).
+						key("sum").value(costModel.get(i).getSum()).
+						key("date").value(costModel.get(i).getDate()).endObject();
+				}
+			}else{
+				stringer.object().endObject();
 			}
 			stringer.endArray();
 			
-		}else if(action=="form"){
+		}else if(action.equals("form")){
 			ArrayList<FormModel> fList = new ArrayList<FormModel>();
 			fList = CostAction.findFormModel();
 			stringer.array();
@@ -152,7 +157,7 @@ public class CostService extends HttpServlet {
 					key("sum").value(fList.get(i).getSum()).endObject();
 			}
 			stringer.endArray();
-		}else if(action=="week"){
+		}else if(action.equals("week")){
 			ArrayList<WeekModel> wList = new ArrayList<WeekModel>();
 			wList = CostAction.findWeekMode();
 			stringer.array();
