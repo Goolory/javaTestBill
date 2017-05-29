@@ -129,10 +129,10 @@ public class CostService extends HttpServlet {
 			}
 		}else if(action.equals("select")){
 			String category_id = request.getParameter("category_id");
-			String note = request.getParameter("category_id");
+			String note = request.getParameter("note");
 			System.out.println(note);
 			ArrayList<CostModel> costModel = CostAction.findByA(Integer.parseInt(category_id), note);
-			
+
 			stringer.array();
 			if(costModel!=null){
 				for(int i=0;i<costModel.size();i++){

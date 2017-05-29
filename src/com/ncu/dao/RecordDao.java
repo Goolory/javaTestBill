@@ -74,10 +74,10 @@ public class RecordDao {
 		PreparedStatement st = null;
 		try {
 			conn = DBUtil.getConnection();
-			String sql = "select r.id as id,m.`name` as member_name ,c.name as category_name ,sum,type_id,`date` from record as r left join category as c on c.id = r.category_id left join member as m on m.id = r.member_id where c.id =? and m.name like '%?%'";
+			String sql = "select r.id as id,m.`name` as member_name ,c.name as category_name ,sum,type_id,`date` from record as r left join category as c on c.id = r.category_id left join member as m on m.id = r.member_id where c.id =? and m.name like ?";
 			st = conn.prepareStatement(sql);
 			st.setInt(1, category_id);
-			st.setString(2, note);
+			st.setString(2, "%"+note+"%");
 			rs = st.executeQuery();
 			while(rs.next()){
 				CostModel c = new CostModel();
