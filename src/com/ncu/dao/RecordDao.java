@@ -16,6 +16,7 @@ import com.ncu.model.WeekModel;
 public class RecordDao {
 	//根据ID查找返回CostModel
 	public CostModel findCostModelById(int id){
+		System.out.println(id);
 		CostModel c = new CostModel();
 		Connection conn = null;
 		ResultSet rs =null;
@@ -37,6 +38,33 @@ public class RecordDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally{
+			try {
+				if(rs!=null){
+					rs.close();
+					rs = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(st!=null){
+					st.close();
+					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	//根据id查找返回records
@@ -47,7 +75,7 @@ public class RecordDao {
 		PreparedStatement st = null;
 		try {
 			conn = DBUtil.getConnection();
-			String sql = "select * from where id = ?";
+			String sql = "select * from record where id = ?";
 			st = conn.prepareStatement(sql);
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -63,6 +91,33 @@ public class RecordDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally{
+			try {
+				if(rs!=null){
+					rs.close();
+					rs = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(st!=null){
+					st.close();
+					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	//查询反回折线图（过去7天）
@@ -88,6 +143,33 @@ public class RecordDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally{
+			try {
+				if(rs!=null){
+					rs.close();
+					rs = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(st!=null){
+					st.close();
+					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	//查询返回支出统计图表
@@ -113,6 +195,33 @@ public class RecordDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally{
+			try {
+				if(rs!=null){
+					rs.close();
+					rs = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(st!=null){
+					st.close();
+					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 	}
@@ -143,6 +252,33 @@ public class RecordDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally{
+			try {
+				if(rs!=null){
+					rs.close();
+					rs = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(st!=null){
+					st.close();
+					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	//查询所有项目以CostModel对象显示
@@ -171,6 +307,33 @@ public class RecordDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally{
+			try {
+				if(rs!=null){
+					rs.close();
+					rs = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(st!=null){
+					st.close();
+					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	//查询所有项目type=1（收入项目）type=2（支付项目）
@@ -217,6 +380,14 @@ public class RecordDao {
 				e.printStackTrace();
 
 			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -242,6 +413,14 @@ public class RecordDao {
 				if(st!=null){
 					st.close();
 					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -276,6 +455,14 @@ public class RecordDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		
@@ -298,6 +485,14 @@ public class RecordDao {
 				if(st!=null){
 					st.close();
 					st = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

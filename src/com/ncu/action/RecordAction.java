@@ -5,7 +5,7 @@ import com.ncu.entity.Records;
 import com.ncu.model.CostModel;
 
 public class RecordAction {
-	private static RecordDao recordDao;
+	private static RecordDao recordDao = new RecordDao();
 	//¸ù¾ÝID²éÕÒrecord
 	public static Records findById(int id){
 		return recordDao.findById(id);

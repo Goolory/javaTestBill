@@ -135,20 +135,45 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             });
         },
         editData: function (id, layero) {
+        	var html = $.ajax({
+                type: "GET",
+                url:  "RecordService?action=findId",
+                data: "id=" + id,
+                async: false
+            }).responseText;
+            var datalist = JSON.parse(html);
+            var member_id = datalist[0].member_id;
+            var category_id = datalist[0].category_id;
+            var ids = [];
+
+            $.cookie('url_id', urlId); 
+            $.cookie('member_id', member_id); 
+            $.cookie('category_id', category_id);
+            
             layer.open({
                 type: 2,
                 title: '修改信息',
-                content: ['add.html?id=' + urlId + '&cate=haha', 'no'],
+                content: ['add.html?id=0', 'no'],
                 btn: ['确定', '取消'],
                 area: ['600px', '500px'],
                 yes: function (index, layero) { 
                     var body = layer.getChildFrame('body', index);
-
+                    console.log(body);
                     var success = false;
                     var cate = body.find("select#cate").val();
                     var member = body.find("select#member").val();
                     var sum = body.find("input#number").val();
                     var date = body.find("input#date").val();
+                    if(cate=="请选择"){
+                    	cate = category_id;
+                    }
+                    if(member=="请选择"){
+                    	member = member_id;
+                    }
+                    console.log(cate);
+                    console.log(member);
+                    console.log(sum);
+                    console.log(date);
                     switch(parseInt(urlId)){
                     case 1:     //收入类别
                         success = editData("IncomeService?action=update",id,cate,member,sum,date);
@@ -164,7 +189,6 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                 },success: function(layero, index){
                     var body = layer.getChildFrame('body', index);
                     body.find("select#cate").val('理财');
-          //          body.find("select#cate").val($("td#"+id).text());
                     body.find("select#member").val($("td#"+id).next().text());
                     body.find("input#number").val($("td#"+id).next().next().text().substr(1));
                     body.find("input#date").val($("td#"+id).next().next().next().text());

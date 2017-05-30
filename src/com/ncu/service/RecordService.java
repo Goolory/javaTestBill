@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ncu.action.RecordAction;
-import com.ncu.model.CostModel;
+import com.ncu.entity.Records;
 
 import net.sf.json.util.JSONStringer;
 
@@ -36,16 +36,14 @@ public class RecordService extends HttpServlet {
 		JSONStringer stringer = new JSONStringer();
 		if(action.equals("findId")){
 			String id = request.getParameter("id");
-			CostModel costModel = new CostModel();
-			
-			costModel = RecordAction.findCostModelById(Integer.parseInt(id));
-			if(costModel!=null){
-				stringer.array();
-				stringer.object().key("member").value(costModel.getMemberName()).
-				key("category_name").value(costModel.getTypeName()).endObject();
-				stringer.endArray();
-				
+			Records records = new Records();
+			records = RecordAction.findById(Integer.parseInt(id));
+			stringer.array();
+			if(records!=null){
+				stringer.object().key("member_id").value(records.getMemberId()).
+				key("category_id").value(records.getCategoryId()).endObject();
 			}
+			stringer.endArray();
 		}
 		response.getOutputStream().write(stringer.toString().getBytes("UTF-8"));
 		response.setContentType("text/json; charset=UTF-8");

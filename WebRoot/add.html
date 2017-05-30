@@ -55,6 +55,7 @@
 	</div>
 	<script type="text/javascript" src="plugin/layui/layui.js"></script>
 	<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.min.js"></script>
 	<script>
 		layui.use([ 'form', 'layedit', 'laydate' ], function() {
 			
@@ -62,8 +63,10 @@
 	</script>
 	<script>
 	    urlId = document.URL.split('?')[1].split("=")[1];
-	//    cate = document.URL.split('?')[1].split('&')[1].split("=")[1];
-	    console.log(cate);
+	    var url_id = $.cookie('url_id'); 
+	    var member_id = $.cookie('member_id'); 
+	    var category_id = $.cookie('category_id');
+	    console.log(category_id);
 		$(function(){
 			var cate = $("#cate");
 			var member = $("#member");
@@ -81,16 +84,20 @@
 				}
 				node.append(htmlC).trigger("create");
 	        }
-	        switch(parseInt(urlId)){
+	        
+	        getData("MemberService?action=find",member);
+	        switch(parseInt(url_id)){
                 case 1:     //收入类别
                     getData("CategoryService?action=incomeType",cate);
-                    $("select#cate").val('理财')
                     break;
                 case 2:     //支出类别
                     getData("CategoryService?action=costType",cate);
                     break;        
             }
-            getData("MemberService?action=find",member);
+            if(parseInt(urlId)==0){
+                cate.val(category_id);
+                member.val(member_id);
+            }
 		})
 	</script>
 	

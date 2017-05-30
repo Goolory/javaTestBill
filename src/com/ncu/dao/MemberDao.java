@@ -33,6 +33,14 @@ public class MemberDao {
 			return null;
 		}finally{
 			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
 				if(st!=null){
 					st.close();
 					st = null;
@@ -70,6 +78,14 @@ public class MemberDao {
 				}
 				finally{
 					try {
+						if (conn != null) {
+							conn.close();
+							conn = null;
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					try {
 						if(st!=null){
 							st.close();
 							st = null;
@@ -97,6 +113,14 @@ public class MemberDao {
 					return 0;
 				}
 				finally{
+					try {
+						if (conn != null) {
+							conn.close();
+							conn = null;
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 					try {
 						if(st!=null){
 							st.close();
@@ -126,6 +150,14 @@ public class MemberDao {
 					return 0;
 				}
 				finally{
+					try {
+						if (conn != null) {
+							conn.close();
+							conn = null;
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 					try {
 						if(st!=null){
 							st.close();
