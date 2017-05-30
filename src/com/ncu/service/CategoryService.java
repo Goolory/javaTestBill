@@ -52,7 +52,6 @@ public class CategoryService extends HttpServlet {
 			ArrayList<Category> cateList = CostAction.getTypeIncome();
 			if(cateList!=null){
 				JSONStringer stringer = new JSONStringer();
-				
 				stringer.array();
 				for(int i=0;i<cateList.size();i++){
 					stringer.object().key("id").value(cateList.get(i).getId()).

@@ -8,7 +8,7 @@ public class DBUtil {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	private static final String URL = "jdbc:mysql://localhost:3306/bill?useUnicode=true&characterEncoding=UTF-8";
 	private static final String USERNAME = "root";
-	private static final String POSSWORD = "5412";
+	private static final String POSSWORD = "xys147852";
 	
 	private static Connection conn = null;
 	

@@ -14,7 +14,57 @@ import com.ncu.model.FormModel;
 import com.ncu.model.WeekModel;
 
 public class RecordDao {
-	
+	//根据ID查找返回CostModel
+	public CostModel findCostModelById(int id){
+		CostModel c = new CostModel();
+		Connection conn = null;
+		ResultSet rs =null;
+		PreparedStatement st = null;
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "select r.id as id,m.`name` as member_name ,c.name as category_name ,sum,type_id,`date` from record as r left join category as c on c.id = r.category_id left join member as m on m.id = r.member_id where r.id =? ";
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			while(rs.next()){
+				c.setId(rs.getInt("id"));
+				c.setMemberName(rs.getString("member_name"));
+				c.setSum(rs.getDouble("sum"));
+				c.setDate(rs.getDate("date"));
+				c.setTypeName(rs.getString("category_name"));
+			}
+			return c;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	//根据id查找返回records
+	public Records findById(int id){
+		Records records = new Records();
+		Connection conn = null;
+		ResultSet rs =null;
+		PreparedStatement st = null;
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "select * from where id = ?";
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			while(rs.next()){
+				records.setCategoryId(rs.getInt("category_id"));
+				records.setDate(rs.getDate("date"));
+				records.setMemberId(rs.getInt("member_id"));
+				records.setSum(rs.getDouble("sum"));
+				records.setId(rs.getInt("id"));
+				records.setTypeId(rs.getInt("type_id"));
+			}
+			return records;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	//查询反回折线图（过去7天）
 	public ArrayList<WeekModel> findWeekModel(int type){
 		ArrayList<WeekModel> wList = new ArrayList<WeekModel>();

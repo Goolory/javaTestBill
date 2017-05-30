@@ -42,8 +42,6 @@ public class IncomeService extends HttpServlet {
 		JSONStringer stringer = new JSONStringer();
 		if(action.equals("find")){
 			ArrayList<CostModel> costModel = IncomeAction.getRecordIncome();
-			
-			
 			stringer.array();
 			for(int i=0;i<costModel.size();i++){
 				stringer.object().key("id").value(costModel.get(i).getId()).
@@ -108,7 +106,6 @@ public class IncomeService extends HttpServlet {
 					}
 					stringer.endArray();
 				}
-				
 			} catch (ParseException e) {
 				e.printStackTrace();
 				stringer.object().key("success").value("false").endObject();
@@ -140,12 +137,37 @@ public class IncomeService extends HttpServlet {
 			ArrayList<WeekModel> wList = new ArrayList<WeekModel>();
 			wList = IncomeAction.findWeekMode();
 			stringer.array();
-			for(int i=0;i<wList.size();i++){
-				stringer.object().key("type").value(wList.get(i).getType()).
-					key("sum").value(wList.get(i).getSum()).
-					key("date").value(wList.get(i).getDate()).endObject();
+			if(wList!=null){
+				for(int i=0;i<wList.size();i++){
+					stringer.object().key("type").value(wList.get(i).getType()).
+						key("sum").value(wList.get(i).getSum()).
+						key("date").value(wList.get(i).getDate()).endObject();
+				}
+			}else{
+				stringer.object().endObject();
 			}
 			stringer.endArray();
+		}else if(action.equals("select")){
+			String category_id = request.getParameter("id");
+			String note = request.getParameter("note");
+			System.out.println(note);
+			ArrayList<CostModel> costModel = CostAction.findByA(Integer.parseInt(category_id), note);
+
+			stringer.array();
+			if(costModel!=null){
+				for(int i=0;i<costModel.size();i++){
+					stringer.object().key("id").value(costModel.get(i).getId()).
+						key("num").value(costModel.get(i).getTypeName()).
+						key("category").value(costModel.get(i).getTypeName()).
+						key("member").value(costModel.get(i).getMemberName()).
+						key("sum").value(costModel.get(i).getSum()).
+						key("date").value(costModel.get(i).getDate()).endObject();
+				}
+			}else{
+				stringer.object().endObject();
+			}
+			stringer.endArray();
+			
 		}
 		response.getOutputStream().write(stringer.toString().getBytes("UTF-8"));
 		response.setContentType("text/json; charset=UTF-8");

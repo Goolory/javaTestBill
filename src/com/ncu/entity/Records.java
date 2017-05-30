@@ -10,6 +10,9 @@ public class Records {
 	private double sum;
 	private Date date;
 	
+	public void setId(int id) {
+		this.id = id;
+	}
 	public int getId() {
 		return id;
 	}

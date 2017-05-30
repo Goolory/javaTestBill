@@ -38,7 +38,6 @@ public class MemberService extends HttpServlet {
 			mList = MemberAction.findAll();
 			if(mList!=null){
 				JSONStringer stringer = new JSONStringer();
-				
 				stringer.array();
 				for(int i=0;i<mList.size();i++){
 					stringer.object().key("id").value(mList.get(i).getId()).
