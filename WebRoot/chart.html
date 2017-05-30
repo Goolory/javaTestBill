@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>收支情况统计</title>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+<script src="code/highcharts.js"></script>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="code/highcharts-3d.js"></script>
+<script src="code/modules/exporting.js"></script>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<script type="text/javascript">
+    urlId = document.URL.split('?')[1].split("=")[1];
+    switch(parseInt(urlId)){
+        case 1:     //收入类别
+            setIncomeChart();
+            break;
+        case 2:     //支出类别
+            setCostChart();
+            break;         
+    }
+
+    function setIncomeChart(){
+        mychart = new Highcharts.chart('container', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: {
+                text: '收入来源比例'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '收入来源比例'
+            }]
+        });
+    
+        mychart.series[0].setData(getData());
+        setInterval(function() {
+            mychart.series[0].setData(getData());
+        }, 5000);
+    }
+    
+    function setCostChart(){
+        Highcharts.chart('container', {
+            title: {
+                text: '家庭成员消费情况表'
+            },
+            xAxis: {
+                categories: ['衣服', '食品', '交通', '旅游', '学习']
+            },
+            labels: {
+                items: [{
+                    html: '总消费',
+                    style: {
+                        left: '50px',
+                        top: '18px',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                    }
+                }]
+            },
+            series: [{
+                type: 'column',
+                name: '父亲',
+                data: [3, 2, 1, 3, 4]
+            }, {
+                type: 'column',
+                name: '母亲',
+                data: [2, 3, 5, 7, 6]
+            }, {
+                type: 'column',
+                name: '弟弟',
+                data: [4, 3, 3, 9, 0]
+            }, {
+                type: 'spline',
+                name: '妹妹',
+                data: [3, 2.67, 3, 6.33, 3.33],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            }, {
+                type: 'pie',
+                name: 'Total consumption',
+                data: [{
+                    name: '父亲',
+                    y: 13,
+                    color: Highcharts.getOptions().colors[0] // Jane's color
+                }, {
+                    name: '母亲',
+                    y: 23,
+                    color: Highcharts.getOptions().colors[1] // John's color
+                }, {
+                    name: '妹妹',
+                    y: 19,
+                    color: Highcharts.getOptions().colors[2] // Joe's color
+                }],
+                center: [100, 80],
+                size: 100,
+                showInLegend: false,
+                dataLabels: {
+                    enabled: false
+                }
+            }]
+        });
+    }
+    
+    function getData(){
+        var list = new Array();
+        var html = $.ajax({
+           type: "GET",
+           url:  "IncomeService?action=form",
+           async: false
+        }).responseText;     
+        var datalist = JSON.parse(html);
+        // generate an array of random data
+        var data = [],i;
+        for (i = 0; i < datalist.length; i++) {
+           data.push({
+              name: datalist[i].cate,
+              y: datalist[i].sum
+           });
+        }
+        return data;
+    }
+</script>
+</body>
+</html>
