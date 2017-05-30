@@ -115,19 +115,29 @@
     <script>
 		$(function(){
 			var cate = $("#cate");
-			$.ajax({
-				url:"CategoryService?action=incomeType",
-	            type:"GET",
-	            success:function(result){
-	                if(result!=null){
-	                    var htmlC="";
-	                    for(var i=0;i<result.length;i++){
-	                        htmlC += "<option value="+result[i].id+">"+result[i].name+"</option>";
-	                    }
-	                    cate.append(htmlC).trigger("create");
-	                }
-	            }
-			})
+			urlId = document.URL.split('?')[1].split("=")[1];
+            function getData(addr){
+                var list = new Array();
+                var html = $.ajax({
+                   type: "GET",
+                   url:  addr,
+                   async: false
+                }).responseText;     
+                var result = JSON.parse(html);
+                var htmlC="";
+                for(var i = 0;i < result.length; i++){
+                    htmlC += "<option value=" + result[i].id + ">" + result[i].name + "</option>";
+                }
+                cate.append(htmlC).trigger("create");
+            }
+            switch(parseInt(urlId)){
+                case 1:     //收入类别
+                    getData("CategoryService?action=incomeType",cate);
+                    break;
+                case 2:     //支出类别
+                    getData("CategoryService?action=costType",cate);
+                    break;        
+            }
 		})
 	</script>
     <!-- layui.js -->

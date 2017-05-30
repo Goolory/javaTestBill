@@ -184,63 +184,37 @@
                 marker: {
                     symbol: 'square'
                 },
-                // data: [7.0, 18.2, 21.5, 25.2, 26.5, 23.3, 9.6
-                // ]
             }, {
                 name: '支出',
                 marker: {
                     symbol: 'diamond'
                 },
-                data: [{
-                    y: 3.9,
-                }, 4.2, 16.6, 14.2, 10.3, 6.6, 4.8]
             }]
         });
-
-        function getIncomeData(){
-        	console.log("1111");
+        
+        function getData(addr){
             var list = new Array();
             var html = $.ajax({
                type: "GET",
-               url:  "IncomeService?action=week",
+               url:  addr,
                async: false
             }).responseText;     
             var datalist = JSON.parse(html);
-            // generate an array of random data
             var data = [],i;
             for (i = 0; i < datalist.length; i++) {
                data.push({
-                  name: datalist[i].cate,
                   y: datalist[i].sum
                });
             }
             return data;
         }
         
-        function getCostData(){
-            var list = new Array();
-            var html = $.ajax({
-               type: "GET",
-               url:  "CostService?action=week",
-               async: false
-            }).responseText;     
-            var datalist = JSON.parse(html);
-            // generate an array of random data
-            var data = [],i;
-            for (i = 0; i < datalist.length; i++) {
-               data.push({
-                  name: datalist[i].cate,
-                  y: datalist[i].sum
-               });
-            }
-            return data;
-        }
-
-        var data = [];
-        data = getIncomeData();
-        data.push(7.0, 18.2, 21.5, 25.2, 26.5, 23.3, 9.6)
-        mychart.series[0].setData(data);
-    //    mychart.series[0].setData(data);
+        mychart.series[0].setData(getData("IncomeService?action=week"));
+        mychart.series[1].setData(getData("CostService?action=week"));
+        setInterval(function() {
+            mychart.series[0].setData(getData("IncomeService?action=week"));
+            mychart.series[1].setData(getData("CostService?action=week"));
+        }, 5000);
     </script>
 </body>
 </html>

@@ -22,7 +22,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">类别</label>
 				<div class="layui-input-block" >
-					<select id="cate" lay-filter="aihao">
+					<select id="cate">
 						<option value="请选择"></option>
 					</select>
 				</div>
@@ -61,37 +61,36 @@
 		});
 	</script>
 	<script>
+	    urlId = document.URL.split('?')[1].split("=")[1];
+	    cate = document.URL.split('?')[1].split('&')[1].split("=")[1];
+	    console.log(cate);
 		$(function(){
 			var cate = $("#cate");
 			var member = $("#member");
-			$.ajax({
-				url:"CategoryService?action=incomeType",
-				type:"GET",
-				success:function(result){
-					if(result!=null){
-					var htmlC="";
-					for(var i=0;i<result.length;i++){
-						htmlC += "<option value="+result[i].id+">"+result[i].name+"</option>";
-						}
-						cate.append(htmlC).trigger("create");
-					}
-					
+			function getData(addr,node){
+	            var list = new Array();
+	            var html = $.ajax({
+	               type: "GET",
+	               url:  addr,
+	               async: false
+	            }).responseText;     
+	            var result = JSON.parse(html);
+	            var htmlC="";
+			    for(var i = 0;i < result.length; i++){
+				    htmlC += "<option value=" + result[i].id + ">" + result[i].name + "</option>";
 				}
-			})
-			
-			$.ajax({
-				url:"MemberService?action=find",
-				type:"GET",
-				success:function(result){
-					if(result!=null){
-					var html="";
-					for(var i=0;i<result.length;i++){
-						html += "<option value="+result[i].id+">"+result[i].name+"</option>";
-						}
-						member.append(html).trigger("create");
-					}
-				}
-			})
+				node.append(htmlC).trigger("create");
+	        }
+	        switch(parseInt(urlId)){
+                case 1:     //收入类别
+                    getData("CategoryService?action=incomeType",cate);
+                    $("select#cate").val('理财')
+                    break;
+                case 2:     //支出类别
+                    getData("CategoryService?action=costType",cate);
+                    break;        
+            }
+            getData("MemberService?action=find",member);
 		})
 	</script>
 	

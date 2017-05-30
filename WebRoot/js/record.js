@@ -60,7 +60,7 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
         layer.open({
             type: 2,
             title: '添加信息',
-            content: ['add.html', 'no'],
+            content: ['add.html?id=' + urlId, 'no'],
             btn: ['确定', '取消'],
             area: ['600px', '500px'],
             yes: function (index, layero) { 
@@ -105,13 +105,9 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
 
     //监听全选
     form.on('checkbox(select_all)', function (data) {
-        var x=document.getElementsByName("myselect");
-        for(i=0;i<x.length;i++){           
-            if(data.elem.checked){
-                x[i].checked=true;
-            }else{
-                x[i].checked=false;
-            }
+        var x = document.getElementsByName("myselect");
+        for(i = 0; i < x.length; i++){           
+            x[i].checked = data.elem.checked;
         };
     });
 
@@ -121,8 +117,6 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             layer.confirm('确定删除？', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                // layer.msg('删除成功'); 
-                // $("td#"+id).parent().remove();
                 var success = false;
                 switch(parseInt(urlId)){
                 case 1:     //收入记录
@@ -144,7 +138,7 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
             layer.open({
                 type: 2,
                 title: '修改信息',
-                content: ['add.html', 'no'],
+                content: ['add.html?id=' + urlId + '&cate=haha', 'no'],
                 btn: ['确定', '取消'],
                 area: ['600px', '500px'],
                 yes: function (index, layero) { 
@@ -169,7 +163,8 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                     initilData(1, 8);  
                 },success: function(layero, index){
                     var body = layer.getChildFrame('body', index);
-                    body.find("select#cate").val($("td#"+id).text());
+                    body.find("select#cate").val('理财');
+          //          body.find("select#cate").val($("td#"+id).text());
                     body.find("select#member").val($("td#"+id).next().text());
                     body.find("input#number").val($("td#"+id).next().next().text().substr(1));
                     body.find("input#date").val($("td#"+id).next().next().next().text());
@@ -234,10 +229,10 @@ function Search(){
     var id = $('#cate').val();
     switch(parseInt(urlId)){
     case 1:     //收入类别
-        searchResult = getSearch("CostService?action=select", id, key);
+        searchResult = getSearch("IncomeService?action=select", id, key);
         break;
     case 2:     //支出类别
-        searchResult = getSearch(addr, key);
+        searchResult = getSearch("CostService?action=select", id, key);
         break;         
     }
 

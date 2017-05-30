@@ -94,7 +94,7 @@ layui.define(['element','laypage', 'layer', 'form', 'pagesize'], function (expor
                     success = addData("CategoryService?action=add",name,2);
                     break;
                 case 3:     //成员信息
-                    success = addData("MemberService?action=add",name,"");
+                    success = addData("MemberService?action=add",name,0);
                     break;            
                 }
                 layer.msg(success==true?'添加成功':'添加失败');
@@ -253,11 +253,12 @@ function Search(){
 }
 
 function addData(addr,name,type){
+    var data = type==0?"name=" + name:"name=" + name + "&type=" + type
     var success = false;
     var html = $.ajax({
        type: "GET",
        url: addr,
-       data: "name=" + name + "&type=" + type,
+       data: data,
        async: false
     }).responseText;
     var datalist = JSON.parse(html);
