@@ -170,10 +170,6 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                     if(member=="请选择"){
                     	member = member_id;
                     }
-                    console.log(cate);
-                    console.log(member);
-                    console.log(sum);
-                    console.log(date);
                     switch(parseInt(urlId)){
                     case 1:     //收入类别
                         success = editData("IncomeService?action=update",id,cate,member,sum,date);
@@ -188,8 +184,6 @@ layui.define(['laypage', 'layer', 'form', 'pagesize'], function (exports) {
                     initilData(1, 8);  
                 },success: function(layero, index){
                     var body = layer.getChildFrame('body', index);
-                    body.find("select#cate").val('理财');
-                    body.find("select#member").val($("td#"+id).next().text());
                     body.find("input#number").val($("td#"+id).next().next().text().substr(1));
                     body.find("input#date").val($("td#"+id).next().next().next().text());
                 }
